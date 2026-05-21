@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export default function Home() {
   const [syllabus, setSyllabus] = useState("");
-  const [profession, setProfession] = useState(""); // jd ko profession kar diya
+  const [profession, setProfession] = useState("");
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +19,7 @@ export default function Home() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ syllabus, profession }), // Yahan bhi profession bhej rahe hain
+          body: JSON.stringify({ syllabus, profession }),
         },
       );
       const data = await res.json();
@@ -36,14 +36,33 @@ export default function Home() {
     setLoading(false);
   };
 
+  // Naya function: Jab user input clear karna chahe manually
+  const handleReset = () => {
+    setSyllabus("");
+    setProfession("");
+    setResult(null);
+  };
+
   return (
     <main className="p-8 max-w-4xl mx-auto bg-slate-900 text-white min-h-screen rounded-xl mt-10 shadow-2xl">
-      <h1 className="text-3xl font-extrabold mb-2 text-indigo-400">
-        ⚡ SyllabusX
-      </h1>
-      <p className="text-sm text-slate-400 mb-8">
-        AI-Powered Academic Gap Analyser
-      </p>
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-extrabold mb-2 text-indigo-400">
+            ⚡ SyllabusX
+          </h1>
+          <p className="text-sm text-slate-400">
+            AI-Powered Academic Gap Analyser
+          </p>
+        </div>
+
+        {/* Naya Reset Button */}
+        <button
+          onClick={handleReset}
+          className="text-xs font-bold text-slate-400 hover:text-white border border-slate-700 hover:bg-slate-800 px-4 py-2 rounded transition-all"
+        >
+          Clear All
+        </button>
+      </div>
 
       <div className="grid md:grid-cols-2 gap-6 mb-6">
         <div>
@@ -54,7 +73,10 @@ export default function Home() {
             placeholder="e.g. DBMS, C, C++, Python, Computer Networks"
             className="w-full p-4 bg-slate-800 rounded-lg border border-slate-700 h-40 text-sm focus:border-indigo-500 focus:outline-none"
             value={syllabus}
-            onChange={(e) => setSyllabus(e.target.value)}
+            onChange={(e) => {
+              setSyllabus(e.target.value);
+              setResult(null); // JAISE HI TYPE KAREGA, PURANA RESULT GAYAB!
+            }}
           />
         </div>
         <div>
@@ -65,7 +87,10 @@ export default function Home() {
             placeholder="e.g. Full Stack Web Developer"
             className="w-full p-4 bg-slate-800 rounded-lg border border-slate-700 h-40 text-sm focus:border-indigo-500 focus:outline-none"
             value={profession}
-            onChange={(e) => setProfession(e.target.value)}
+            onChange={(e) => {
+              setProfession(e.target.value);
+              setResult(null); // JAISE HI TYPE KAREGA, PURANA RESULT GAYAB!
+            }}
           />
         </div>
       </div>
@@ -94,7 +119,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <h3 className="text-sm font-bold text-red-400 mb-3">
-                ❌ Missing Skills (Gaps)
+                ❌ Missing Skills (10 Crucial Gaps)
               </h3>
               <div className="flex flex-wrap gap-2">
                 {result.missingSkills.map((skill: string, i: number) => (
@@ -127,7 +152,7 @@ export default function Home() {
 
           <div className="pt-4 border-t border-slate-700">
             <h3 className="text-sm font-bold text-sky-400 mb-3">
-              🚀 AI Industry Trends (Groq Llama-3)
+              🚀 AI Industry Trends (Groq Llama-3.3)
             </h3>
             <div className="flex flex-wrap gap-2">
               {result.marketTrendsAdvice.map((trend: string, i: number) => (
