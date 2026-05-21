@@ -3,12 +3,12 @@ import { useState } from "react";
 
 export default function Home() {
   const [syllabus, setSyllabus] = useState("");
-  const [jd, setJd] = useState("");
+  const [profession, setProfession] = useState(""); // jd ko profession kar diya
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const handleAnalyze = async () => {
-    if (!syllabus || !jd) {
+    if (!syllabus || !profession) {
       alert("Please fill both inputs!");
       return;
     }
@@ -19,11 +19,16 @@ export default function Home() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ syllabus, jd }),
+          body: JSON.stringify({ syllabus, profession }), // Yahan bhi profession bhej rahe hain
         },
       );
       const data = await res.json();
-      setResult(data);
+
+      if (data.status === "error") {
+        alert(data.message);
+      } else {
+        setResult(data);
+      }
     } catch (error) {
       console.error("Connection failed", error);
       alert("Ensure your Flask backend is running!");
@@ -46,7 +51,7 @@ export default function Home() {
             College Syllabus
           </label>
           <textarea
-            placeholder="Paste syllabus modules..."
+            placeholder="e.g. DBMS, C, C++, Python, Computer Networks"
             className="w-full p-4 bg-slate-800 rounded-lg border border-slate-700 h-40 text-sm focus:border-indigo-500 focus:outline-none"
             value={syllabus}
             onChange={(e) => setSyllabus(e.target.value)}
@@ -54,13 +59,13 @@ export default function Home() {
         </div>
         <div>
           <label className="text-xs font-bold text-slate-400 uppercase mb-2 block">
-            Job Description
+            Target Profession
           </label>
           <textarea
-            placeholder="Paste job requirements..."
+            placeholder="e.g. Full Stack Web Developer"
             className="w-full p-4 bg-slate-800 rounded-lg border border-slate-700 h-40 text-sm focus:border-indigo-500 focus:outline-none"
-            value={jd}
-            onChange={(e) => setJd(e.target.value)}
+            value={profession}
+            onChange={(e) => setProfession(e.target.value)}
           />
         </div>
       </div>
