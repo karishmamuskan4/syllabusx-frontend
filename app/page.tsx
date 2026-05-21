@@ -148,11 +148,28 @@ export default function Home() {
                 ))}
               </div>
             </div>
+            {/* 🛠️ NAYA SECTION: INDUSTRY TOOLS (Fuchsia Color) */}
+            <div className="pt-4 border-t border-slate-700 mt-6">
+              <h3 className="text-sm font-bold text-fuchsia-400 mb-3">
+                🛠️ Must-Know Industry Tools (Software/Frameworks)
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {result.industryTools &&
+                  result.industryTools.map((tool: string, i: number) => (
+                    <span
+                      key={i}
+                      className="bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-300 px-3 py-1.5 rounded-md text-xs font-black tracking-wide"
+                    >
+                      {tool}
+                    </span>
+                  ))}
+              </div>
+            </div>
           </div>
 
           <div className="pt-4 border-t border-slate-700">
             <h3 className="text-sm font-bold text-sky-400 mb-3">
-              🚀 AI Industry Trends (Groq Llama-3.3)
+              🚀 AI Industry Trends
             </h3>
             <div className="flex flex-wrap gap-2">
               {result.marketTrendsAdvice.map((trend: string, i: number) => (
